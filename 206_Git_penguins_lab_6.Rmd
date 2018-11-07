@@ -70,9 +70,60 @@ qqplot
 ```
 
 
+Evaluate variances and perfrom a Levene's Test for equal variances
+
+```{r}
+
+# If the largest sample variances is < 4x greater than the smallest sample variance, then these are "close enough" to consider variances equal
+
+variances <- penguins2 %>% 
+  group_by(common_name) %>% 
+  summarize(
+    variance = var(flipper_length)
+  )
+
+variances #variance units will be in mm^2 ... The largest variance (33.1) is definitely not more than 4x greater than the smallest variance (15.2)
+
+# Levene's Test
+# leveneTest function in the 'car' package
+
+
+levene_penguin <- leveneTest(flipper_length ~ common_name, data= penguins2)
+
+levene_penguin
+
+# H0: No difference in variances (variances are equal)
+# HA: Variances are NOT equal
+
+# There is no significant difference in variances across species, 
+```
 
 
 
+One-way ANOVA for penguin flipper lengths by species (common_name)
+
+```{r}
+
+# H0: THe means across all groups are equal
+# HA: At least two group means differ significantly 
+
+penguin_aov <- aov(flipper_length ~ common_name, data = penguins2)
+summary(penguin_aov)
+
+
+# Post-hoc testing by Tukey's HSD
+
+
+#H 0: No significant difference in pairwise means
+# HA: There IS a significant difference in pairwise means
+
+penguin_ph <- TukeyHSD(penguin_aov)
+penguin_ph
+
+# All p-values for each species is very low, meaning there are differences among all of them
+```
+
+Mean flipper lengths of female penguins differed significantly for all species studied (one-way anova, F(df) = statistic, p < 0.001, $\alpha$ = 0.05 with post-hoc Tukey's HSD, $\alpha$ = 0.05).
 
 
 
