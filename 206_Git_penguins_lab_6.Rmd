@@ -49,4 +49,30 @@ penguins2 <- penguins %>%
 ```
 
 
+Exploratory graphs and Levene's test for equal variances
+
+```{r}
+
+hists <- ggplot(penguins2, aes(x=flipper_length))+
+  geom_histogram(aes(fill = common_name))+
+  facet_wrap(~common_name, scale="free")
+
+hists
+
+
+qqplot <-ggplot(penguins2, aes(sample=flipper_length))+
+  geom_qq(aes(color = common_name))+
+   facet_wrap(~common_name, scale="free")
+
+qqplot
+
+# Based on qq-plots and histograms, observations for each group appear normally distributed. Also, n > 30 for all groups, so means will be normally distributed by CLT.
+```
+
+
+
+
+
+
+
 
